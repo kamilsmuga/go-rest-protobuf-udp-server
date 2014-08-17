@@ -14,6 +14,14 @@ var (
 	tcpPort = flag.String("tcp", "8081", "tcp port")
 )
 
+type Stats struct {
+	app_sha256 string
+	ip         int64
+	count      uint64
+	goodIps    []int64
+	badIps     []int64
+}
+
 func EventsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		//TODO Return statistics per app_sha256
@@ -24,10 +32,10 @@ func EventsHandler(w http.ResponseWriter, r *http.Request) {
 		  				'bad_ips':LIST_OF_BAD_IPS
 					}
 		*/
-		log.Println("GET")
+		log.Println("GET: " + r.RequestURI)
 	} else if r.Method == "DELETE" {
 		//TODO Purge statistics for app_sha256
-		log.Println("DELETE")
+		log.Println("DELETE: " + r.RequestURI)
 	} else {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
@@ -40,7 +48,7 @@ func main() {
 }
 
 func serveTcp() {
-	http.HandleFunc("/events", EventsHandler)
+	http.HandleFunc("/events/", EventsHandler)
 	log.Printf("Serving TCP requests on: %s:%s\n", *host, *tcpPort)
 	err := http.ListenAndServe(*host+":"+*tcpPort, nil)
 	if err != nil {

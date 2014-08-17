@@ -1,0 +1,6 @@
+package main;
+
+message IpEvent {
+  required string app_sha256 = 1;
+  required int64 ip = 2;
+}
