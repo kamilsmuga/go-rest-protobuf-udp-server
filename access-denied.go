@@ -16,8 +16,17 @@ var (
 
 func EventsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
+		//TODO Return statistics per app_sha256
+		/* Format:
+					{
+		  				'count':NUMBER_OF_EVENTS,
+		  				'good_ips':LIST_OF_GOOD_IPS,
+		  				'bad_ips':LIST_OF_BAD_IPS
+					}
+		*/
 		log.Println("GET")
 	} else if r.Method == "DELETE" {
+		//TODO Purge statistics for app_sha256
 		log.Println("DELETE")
 	} else {
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -55,5 +64,8 @@ func serveUdp() {
 }
 
 func handlePacket(buf []byte, rlen int) {
+	//TODO Decode protobuf message
+	//TODO Validate correct IP range
+	//TODO Store total count, good and bad ips
 	fmt.Println(string(buf[0:rlen]))
 }
